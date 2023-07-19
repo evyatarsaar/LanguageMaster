@@ -1,0 +1,20 @@
+I want to make a project which would be fun to write, but still use concepts that are needed
+for data engineering, or at least for a bit of coding.
+I like making things, and I am ready to do something.
+I'll scarmble around about the idea and then start writing something.
+
+The idea should be something to do with languages.
+maybe learning languages. let's say, that I could create a sqlite database, which everytime
+you want to learn something new, you could ask google translation api to add it to the db.
+when you will ask google-api to do that,
+it will add to db.
+
+base languages:
+- English
+- French
+- German
+- Spanish
+- Dutch
+
+
+db structure: will start with ONE table, named
