@@ -1,8 +1,4 @@
-# File path for SQL statements
-import sqlite3
-
 from api import TranslationAPI
-
 from db import DatabaseManager, check_translation_exists, add_translation_to_db
 
 LANGUAGES = {
