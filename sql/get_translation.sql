@@ -1,1 +1,1 @@
-SELECT {target_language} FROM translations WHERE original_sentence = ?;
+SELECT {} FROM translations WHERE original_sentence = ?;

@@ -61,12 +61,6 @@ def get_translation(text):
     return translations
 
 
-def new_translation_main_run():
-    while True:
-        confirm = input("Would you like to add new translation to the DB? \nyes or no").lower()
-        if confirm == 'yes':
-            text = input("please enter text to translate and add to the DB")
-            translate_and_store(text)
-        if confirm == 'no':
-            print("Thank you for using the app. Goodbye!")
-            break
+def new_translate_main():
+    text = input("please enter text to translate and add to the DB")
+    translate_and_store(text)

@@ -3,6 +3,7 @@ import sqlite3
 
 from db import DatabaseManager
 from utils import load_sql_statement
+from logger_config import logger
 
 LANGUAGES = {
     1: "english",
@@ -27,21 +28,25 @@ def practice_language():
             print("Invalid input. Please enter a valid number.")
 
     while True:
+        try:
+            english_phrase = get_random_english_phrase()
 
-        english_phrase = get_random_english_phrase()
+            print(f"English phrase: {english_phrase}")
+            confirm = input("Press Enter to see the translation in your chosen language.")
 
-        print(f"English phrase: {english_phrase}")
-        confirm = input("Press Enter to see the translation in your chosen language.")
+            translation = get_translation(english_phrase, language)
+            print(f"{language.capitalize()} translation: {translation}")
 
-        translation = get_translation(english_phrase, language)
-        print(f"{language.capitalize()} translation: {translation}")
-
-        choice = input("Do you want to continue learning? \nEnter 'end' to finish learning.").lower()
-        if choice == 'end':
-            print("Happy learning, goodbye!")
-            break
-        print("\n")
-        print("---------")
+            choice = input("Do you want to continue learning? \nEnter 'end' to finish learning.").lower()
+            if choice == 'end':
+                print("Happy learning, goodbye!")
+                break
+            print("\n")
+            print("---------")
+        except Exception as e:
+            # Log the exception using the logger
+            logger.error(f"An error occurred while practicing: {e}")
+            raise
 
 
 def get_random_english_phrase():
@@ -56,23 +61,13 @@ def get_random_english_phrase():
 def get_translation(english_phrase, target_language):
     target_language += '_translation'
     with DatabaseManager('translations.db') as cursor:
-        query = load_sql_statement("sql/get_translation.sql")
-        cursor.execute(query, (english_phrase, target_language))
+        query_template = load_sql_statement("sql/get_translation.sql")
+        query = query_template.format(target_language)
+        cursor.execute(query, (english_phrase,))
 
         translation = cursor.fetchone()[0]
 
     return translation
 
 
-def practice_main_run():
-    print("Would you like to learn from the translations database?")
-    while True:
-        choice = input("Enter 'yes' or 'no': ").lower()
-        if choice == "yes":
-            practice_language()
-            break
-        elif choice == "no":
-            print("Thank you for using the app. Goodbye!")
-            break
-        else:
-            print("Invalid input. Please enter 'yes' or 'no'.")
+

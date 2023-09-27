@@ -2,6 +2,7 @@ import sqlite3
 from utils import load_sql_statement
 from logger_config import logger  # Import the logger
 
+
 class DatabaseManager:
     def __init__(self, db_file):
         self.db_file = db_file
@@ -11,12 +12,13 @@ class DatabaseManager:
             self.conn = sqlite3.connect(self.db_file)
             return self.conn.cursor()
         except sqlite3.Error as e:
-            logger.error(f"Database connection error: {e}")  # Log the error
+            logger.error(f"Database connection error: {e}")
             raise
 
     def __exit__(self, exc_type, exc_val, exc_tb):
         self.conn.commit()
         self.conn.close()
+
 
 def check_translation_exists(cursor, text, translations):
     try:
@@ -26,7 +28,8 @@ def check_translation_exists(cursor, text, translations):
         result = cursor.fetchone()
         return result is not None
     except sqlite3.Error as e:
-        logger.error(f"Database query error: {e}")  # Log the error
+        logger.error(f"Database query error: {e}")
+
 
 def add_translation_to_db(cursor, text, translations):
     try:
@@ -34,4 +37,4 @@ def add_translation_to_db(cursor, text, translations):
         parameters = [text] + list(translations.values())
         cursor.execute(query, parameters)
     except sqlite3.Error as e:
-        logger.error(f"Database query error: {e}")  # Log the error
+        logger.error(f"Database query error: {e}")
