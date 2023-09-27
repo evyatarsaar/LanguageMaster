@@ -1,5 +1,6 @@
 import sqlite3
 from utils import load_sql_statement
+from logger_config import logger
 
 
 class DatabaseManager:
