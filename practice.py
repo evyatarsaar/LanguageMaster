@@ -1,6 +1,9 @@
 import random
 import sqlite3
 
+from db import DatabaseManager
+from utils import load_sql_statement
+
 LANGUAGES = {
     1: "english",
     2: "german",
@@ -42,13 +45,9 @@ def practice_language():
 
 
 def get_random_english_phrase():
-    conn = sqlite3.connect('translations.db')
-    cursor = conn.cursor()
-
-    cursor.execute("SELECT original_sentence FROM translations")
-    english_phrases = cursor.fetchall()
-
-    conn.close()
+    with DatabaseManager('translations.db') as cursor:
+        cursor.execute("SELECT original_sentence FROM translations")
+        english_phrases = cursor.fetchall()
 
     random_phrase = random.choice(english_phrases)
     return random_phrase[0]
@@ -56,15 +55,11 @@ def get_random_english_phrase():
 
 def get_translation(english_phrase, target_language):
     target_language += '_translation'
-    conn = sqlite3.connect('translations.db')
-    cursor = conn.cursor()
+    with DatabaseManager('translations.db') as cursor:
+        query = load_sql_statement("sql/get_translation.sql")
+        cursor.execute(query, (english_phrase, target_language))
 
-    query = "SELECT {} FROM translations WHERE original_sentence = ?".format(target_language)
-    cursor.execute(query, (english_phrase,))
-
-    translation = cursor.fetchone()[0]
-
-    conn.close()
+        translation = cursor.fetchone()[0]
 
     return translation
 

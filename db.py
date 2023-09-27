@@ -1,6 +1,7 @@
 import sqlite3
 from utils import load_sql_statement
 
+
 class DatabaseManager:
     def __init__(self, db_file):
         self.db_file = db_file
@@ -17,9 +18,10 @@ class DatabaseManager:
         self.conn.commit()
         self.conn.close()
 
+
 def check_translation_exists(cursor, text, translations):
     try:
-        query = load_sql_statement("check_translation.sql")
+        query = load_sql_statement("sql/check_translation.sql")
         parameters = [text] + list(translations.values())
         cursor.execute(query, parameters)
         result = cursor.fetchone()
@@ -27,9 +29,10 @@ def check_translation_exists(cursor, text, translations):
     except sqlite3.Error as e:
         print(f"Database query error: {e}")
 
+
 def add_translation_to_db(cursor, text, translations):
     try:
-        query = load_sql_statement("add_translation.sql")
+        query = load_sql_statement("sql/add_translation.sql")
         parameters = [text] + list(translations.values())
         cursor.execute(query, parameters)
     except sqlite3.Error as e:
