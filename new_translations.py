@@ -1,6 +1,7 @@
 from api import TranslationAPI
 from db import DatabaseManager, check_translation_exists, add_translation_to_db
 from requests.exceptions import RequestException
+from logger_config import logger
 
 LANGUAGES = {
     # "english": "en",
@@ -31,12 +32,12 @@ def translate_and_store(text):
         with DatabaseManager('translations.db') as cursor:
             if not check_translation_exists(cursor, text, translations):
                 add_translation_to_db(cursor, text, translations)
-                print("Translation added to translations.db.")
+                logger.info("Translation added to translations.db.")
             else:
-                print("Translation already exists in translations.db.")
+                logger.info("Translation already exists in translations.db.")
     except Exception as e:
         # Handle any unexpected errors
-        print(f"An unexpected error occurred: {e}")
+        logger.error(f"An unexpected error occurred: {e}")
 
 
 @print_translations
@@ -50,11 +51,11 @@ def get_translation(text):
             translations[language] = translation
         except RequestException as e:
             # Handle API request error
-            print(f"Error translating to {language}: {e}")
+            logger.error(f"Error translating to {language}: {e}")
             translations[language] = "Translation not available due to an error"
         except Exception as e:
             # Handle other unexpected errors
-            print(f"An unexpected error occurred: {e}")
+            logger.error(f"An unexpected error occurred: {e}")
             translations[language] = "Translation not available due to an error"
 
     return translations
