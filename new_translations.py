@@ -2,7 +2,6 @@ from api import TranslationAPI
 from db import DatabaseManager, check_translation_exists, add_translation_to_db
 from requests.exceptions import RequestException
 
-
 LANGUAGES = {
     # "english": "en",
     "german": "de",
@@ -13,17 +12,19 @@ LANGUAGES = {
 
 
 def translate_and_store(text):
-    translations = get_translation(text)
+    try:
+        translations = get_translation(text)
 
-    if not check_translation_exists(text, translations):
-        add_translation_to_db(text, translations)
-        print("Translation added to translations.db.")
-    else:
-        print("Translation already exists in translations.db.")
+        with DatabaseManager('translations.db') as cursor:
+            if not check_translation_exists(cursor, text, translations):
+                add_translation_to_db(cursor, text, translations)
+                print("Translation added to translations.db.")
+            else:
+                print("Translation already exists in translations.db.")
+    except Exception as e:
+        # Handle any unexpected errors
+        print(f"An unexpected error occurred: {e}")
 
-
-
-from requests.exceptions import RequestException  # Assuming TranslationAPI raises this exception
 
 def get_translation(text):
     translator = TranslationAPI()
@@ -43,16 +44,6 @@ def get_translation(text):
             translations[language] = "Translation not available due to an error"
 
     return translations
-
-
-def translation_exists(text, translations):
-    with DatabaseManager('translations.db') as cursor:
-        return check_translation_exists(cursor, text, translations)
-
-
-def add_translation(text, translations):
-    with DatabaseManager('translations.db') as cursor:
-        add_translation(cursor, text, translations)
 
 
 def new_translation_main_run():
