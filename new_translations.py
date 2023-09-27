@@ -3,6 +3,8 @@ import sqlite3
 
 from api import TranslationAPI
 
+from db import DatabaseManager, check_translation_exists, add_translation_to_db
+
 LANGUAGES = {
     # "english": "en",
     "german": "de",
@@ -34,34 +36,13 @@ def get_translation(text):
 
 
 def translation_exists(text, translations):
-    conn = sqlite3.connect('translations.db')
-    cursor = conn.cursor()
-
-    query = load_sql_statement("check_translation.sql")
-    parameters = [text] + list(translations.values())
-    cursor.execute(query, parameters)
-    result = cursor.fetchone()
-
-    conn.close()
-
-    return result is not None
+    with DatabaseManager('translations.db') as cursor:
+        return check_translation_exists(cursor, text, translations)
 
 
 def add_translation(text, translations):
-    conn = sqlite3.connect('translations.db')
-    cursor = conn.cursor()
-
-    query = load_sql_statement("add_translation.sql")
-    parameters = [text] + list(translations.values())
-    cursor.execute(query, parameters)
-
-    conn.commit()
-    conn.close()
-
-
-def load_sql_statement(file):
-    with open(file, "r") as sql_file:
-        return sql_file.read()
+    with DatabaseManager('translations.db') as cursor:
+        add_translation(cursor, text, translations)
 
 
 def new_translation_main_run():
