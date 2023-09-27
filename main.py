@@ -1,7 +1,7 @@
 import sqlite3, random
 from api import TranslationAPI
-from practice import *
-from new_translations import *
+from practice import practice_main_run
+from new_translations import new_translation_main_run
 
 
 def main():

@@ -11,6 +11,19 @@ LANGUAGES = {
 }
 
 
+# Decorator function to print translations
+def print_translations(func):
+    def wrapper(text):
+        translations = func(text)  # Call the original function
+
+        for language, translation in translations.items():
+            print(f"Translation to {language}: {translation}")
+
+        return translations
+
+    return wrapper
+
+
 def translate_and_store(text):
     try:
         translations = get_translation(text)
@@ -26,6 +39,7 @@ def translate_and_store(text):
         print(f"An unexpected error occurred: {e}")
 
 
+@print_translations
 def get_translation(text):
     translator = TranslationAPI()
     translations = {}
