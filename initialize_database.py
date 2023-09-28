@@ -1,4 +1,5 @@
 import sqlite3
+from logger_config import logger
 
 # List of 10 basic sentences
 sentences = [
@@ -39,4 +40,4 @@ def initialize_database():
 
 if __name__ == '__main__':
     initialize_database()
-    print("Database initialized with 10 basic sentences.")
+    logger.info("Database initialized with 10 basic sentences.")

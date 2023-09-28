@@ -1,6 +1,6 @@
 from logger_config import logger
 from db import DatabaseManager
-from data_integrity import SELECT_DATA_DEDUPLICATION, SELECT_EMPTY_ROWS, DELETE_DATA_DEDUPLICATION, DELETE_EMPTY_ROWS
+from data_integrity_sql import SELECT_DATA_DEDUPLICATION, SELECT_EMPTY_ROWS, DELETE_DATA_DEDUPLICATION, DELETE_EMPTY_ROWS
 
 
 def process_deletion(cursor, select_query, delete_query):
