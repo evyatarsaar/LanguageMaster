@@ -1,5 +1,3 @@
-import sqlite3, random
-from api import TranslationAPI
 from practice import practice_language
 from new_translations import new_translate_main
 from logger_config import logger
