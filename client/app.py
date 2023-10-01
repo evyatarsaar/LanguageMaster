@@ -1,8 +1,5 @@
 from flask import Flask, request, render_template, redirect, url_for, session, flash
-from sqlalchemy import create_engine, Column, Integer, String
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker
-import hashlib
+from sqlalchemy import create_engine, Column, Integer, Stringfrom sqlalchemy.orm import sessionmaker, declarative_base
 import bcrypt
 import os
 
@@ -64,12 +61,9 @@ def login():
         # Hash the entered password and compare it to the stored hash
         hashed_password = hashlib.sha256(password.encode()).hexdigest()
 
-        session = Session()
-        user = session.query(User).filter_by(username=username, password=hashed_password).first()
-        session.close()
-
-        if user:
+        if user and bcrypt.checkpw(password.encode('utf-8'), user.password.encode('utf-8')):
             session['username'] = username
+            session_.close()
             return redirect(url_for('home'))
         else:
             flash('Login failed. Please check your username and password.')
