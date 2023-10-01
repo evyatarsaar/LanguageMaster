@@ -42,11 +42,11 @@ def register():
         # Hash the password using bcrypt
         hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
 
-        session = Session()
+        db_session = Session()
         user = User(username=username, email=email, password=hashed_password.decode('utf-8'))
-        session.add(user)
-        session.commit()
-        session.close()
+        db_session.add(user)
+        db_session.commit()
+        db_session.close()
 
         flash('Registration successful. Please log in.')
         return redirect(url_for('login'))
@@ -59,12 +59,13 @@ def login():
         username = request.form['username']
         password = request.form['password']
 
-        # Hash the entered password and compare it to the stored hash
-        hashed_password = hashlib.sha256(password.encode()).hexdigest()
+        db_session = Session()  # Create an SQLAlchemy session
+        user = db_session.query(User).filter_by(username=username).first()
 
         if user and bcrypt.checkpw(password.encode('utf-8'), user.password.encode('utf-8')):
+            # Store user information in the Flask session
             session['username'] = username
-            session_.close()
+            db_session.close()  # Close the SQLAlchemy session
             return redirect(url_for('home'))
         else:
             flash('Login failed. Please check your username and password.')
