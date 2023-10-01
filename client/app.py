@@ -3,6 +3,7 @@ from sqlalchemy import create_engine, Column, Integer, String
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 import hashlib
+import bcrypt
 import os
 
 app = Flask(__name__)
@@ -40,11 +41,11 @@ def register():
         email = request.form['email']
         password = request.form['password']
 
-        # Hash the password before storing it (you should use a stronger library for hashing)
-        hashed_password = hashlib.sha256(password.encode()).hexdigest()
+        # Hash the password using bcrypt
+        hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
 
         session = Session()
-        user = User(username=username, email=email, password=hashed_password)
+        user = User(username=username, email=email, password=hashed_password.decode('utf-8'))
         session.add(user)
         session.commit()
         session.close()

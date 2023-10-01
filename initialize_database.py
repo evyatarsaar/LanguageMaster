@@ -1,6 +1,6 @@
 import sqlite3
 from logger_config import logger
-
+from db import DatabaseManager
 # List of 10 basic sentences
 sentences = [
     ("Hello", "Hallo", "Hallo", "Hola", "Bonjour"),
@@ -16,26 +16,32 @@ sentences = [
 ]
 
 
+
 def initialize_database():
-    conn = sqlite3.connect('translations.db')
-    cursor = conn.cursor()
+    # Initialize the database using your DatabaseManager
+    with DatabaseManager('translations.db') as cursor:
+        # Create the translations table
+        cursor.execute('''CREATE TABLE IF NOT EXISTS translations (
+                            id INTEGER PRIMARY KEY,
+                            original_sentence TEXT,
+                            german_translation TEXT,
+                            dutch_translation TEXT,
+                            spanish_translation TEXT,
+                            french_translation TEXT,
+                            timestamp DATETIME DEFAULT CURRENT_TIMESTAMP)''')
 
-    cursor.execute('''CREATE TABLE IF NOT EXISTS translations (
-                        id INTEGER PRIMARY KEY,
-                        original_sentence TEXT,
-                        german_translation TEXT,
-                        dutch_translation TEXT,
-                        spanish_translation TEXT,
-                        french_translation TEXT,
-                        timestamp DATETIME DEFAULT CURRENT_TIMESTAMP)''')
+        for sentence in sentences:
+            original, german, dutch, spanish, french = sentence
+            cursor.execute('''INSERT INTO translations (original_sentence, german_translation, dutch_translation, spanish_translation, french_translation)
+                              VALUES (?, ?, ?, ?, ?)''', (original, german, dutch, spanish, french))
 
-    for sentence in sentences:
-        original, german, dutch, spanish, french = sentence
-        cursor.execute('''INSERT INTO translations (original_sentence, german_translation, dutch_translation, spanish_translation, french_translation)
-                          VALUES (?, ?, ?, ?, ?)''', (original, german, dutch, spanish, french))
-
-    conn.commit()
-    conn.close()
+        # Create the users table
+        cursor.execute('''CREATE TABLE IF NOT EXISTS users (
+                            id INTEGER PRIMARY KEY,
+                            username TEXT NOT NULL,
+                            email TEXT NOT NULL,
+                            password_hash TEXT NOT NULL,
+                            timestamp DATETIME DEFAULT CURRENT_TIMESTAMP)''')
 
 
 if __name__ == '__main__':

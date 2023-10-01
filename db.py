@@ -2,7 +2,6 @@ import sqlite3
 from utils import load_sql_statement
 from logger_config import logger  # Import the logger
 
-
 class DatabaseManager:
     def __init__(self, db_file):
         self.db_file = db_file
