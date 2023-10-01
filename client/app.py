@@ -10,7 +10,7 @@ app = Flask(__name__)
 app.secret_key = os.urandom(24)  # Secret key for session management
 
 # SQLAlchemy database setup
-engine = create_engine('sqlite:///translations.db')  # Replace with your database URI
+engine = create_engine('sqlite:///../translations.db')  # Replace with your database URI
 Base = declarative_base()
 
 
