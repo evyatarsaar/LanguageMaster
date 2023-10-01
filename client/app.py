@@ -1,5 +1,6 @@
 from flask import Flask, request, render_template, redirect, url_for, session, flash
-from sqlalchemy import create_engine, Column, Integer, Stringfrom sqlalchemy.orm import sessionmaker, declarative_base
+from sqlalchemy import create_engine, Column, Integer, String
+from sqlalchemy.orm import sessionmaker, declarative_base
 import bcrypt
 import os
 
