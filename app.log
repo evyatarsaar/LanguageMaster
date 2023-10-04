@@ -19,3 +19,10 @@
 2023-10-04 13:25:53,580 - logger_config - INFO - Starting the application...
 2023-10-04 13:25:59,062 - logger_config - INFO - the random phrase selected is:
 ('you are amazing', 'je bent geweldig')
+2023-10-04 14:02:54,559 - logger_config - INFO - Starting the application...
+2023-10-04 14:03:00,556 - logger_config - INFO - the random phrase selected is: ('Thank you', 'Dank je')
+2023-10-04 14:03:48,628 - logger_config - INFO - the random phrase selected is: ('How are you?', 'Hoe gaat het?')
+2023-10-04 14:04:29,238 - logger_config - INFO - Starting the application...
+2023-10-04 14:04:32,868 - logger_config - INFO - the random phrase selected is: ('Yes', 'Sí')
+2023-10-04 14:04:36,372 - logger_config - INFO - the random phrase selected is: ('Goodbye', 'Adiós')
+2023-10-04 14:04:45,188 - logger_config - INFO - the random phrase selected is: ('i like trains', 'me gustan los trenes')
