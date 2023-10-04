@@ -29,12 +29,11 @@ def practice_language():
 
     while True:
         try:
-            english_phrase = get_random_english_phrase()
+            english_phrase, translation = get_random_phrase(foreign_language=language)
 
             print(f"English phrase: {english_phrase}")
             confirm = input("Press Enter to see the translation in your chosen language.")
 
-            translation = get_translation(english_phrase, language)
             print(f"{language.capitalize()} translation: {translation}")
 
             choice = input("Do you want to continue learning? \nEnter 'end' to finish learning.").lower()
@@ -49,25 +48,19 @@ def practice_language():
             raise
 
 
-def get_random_english_phrase():
+def get_random_phrase(foreign_language, english_column_name='original_sentence'):
+
+    foreign_language_column_name = f'{foreign_language}_translation'
     with DatabaseManager('translations.db') as cursor:
-        cursor.execute("SELECT original_sentence FROM translations")
-        english_phrases = cursor.fetchall()
+        cursor.execute(f"SELECT {english_column_name}, {foreign_language_column_name}  FROM translations")
+        phrases = cursor.fetchall()
 
-    random_phrase = random.choice(english_phrases)
-    return random_phrase[0]
+    random_phrase = random.choice(phrases)
+    logger.info(f"the random phrase selected is:\n{random_phrase}")
+    english_phrase = random_phrase[0]
+    foreign_language_phrase = random_phrase[1]
+    return english_phrase, foreign_language_phrase
 
-
-def get_translation(english_phrase, target_language):
-    target_language += '_translation'
-    with DatabaseManager('translations.db') as cursor:
-        query_template = load_sql_statement("sql/get_translation.sql")
-        query = query_template.format(target_language)
-        cursor.execute(query, (english_phrase,))
-
-        translation = cursor.fetchone()[0]
-
-    return translation
 
 
 
